@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #5f6fff;
+}
+
+::-webkit-scrollbar {
+  @apply w-1 h-1;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-200 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary rounded-lg transition-all duration-300;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-blue-700;
+}
+
+* {
+  font-family: Outfit;
+}
+
+.str-video__call-controls {
+  gap: 2vw;
+}
+
+.str-video__composite-button[title="Record call"] {
+  display: none !important;
+}
+
