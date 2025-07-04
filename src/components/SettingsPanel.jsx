@@ -391,18 +391,18 @@ const SettingsPanel = ({ isOpen, onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden"
+            className="fixed inset-4 md:inset-8 lg:inset-16 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 border-b border-gray-200">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 md:p-6 border-b border-gray-200 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-blue-500 rounded-xl">
-                    <Settings className="text-white" size={24} />
+                    <Settings className="text-white" size={20} md:size={24} />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">Settings</h3>
-                    <p className="text-gray-600">Manage your account preferences</p>
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-900">Settings</h3>
+                    <p className="text-sm md:text-base text-gray-600">Manage your account preferences</p>
                   </div>
                 </div>
                 <motion.button
@@ -411,14 +411,14 @@ const SettingsPanel = ({ isOpen, onClose }) => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <X size={24} />
+                  <X size={20} />
                 </motion.button>
               </div>
             </div>
 
-            <div className="flex h-[calc(90vh-120px)]">
+            <div className="flex flex-1 overflow-hidden">
               {/* Sidebar */}
-              <div className="w-64 bg-gray-50 border-r border-gray-200 p-4">
+              <div className="w-48 md:w-64 bg-gray-50 border-r border-gray-200 p-3 md:p-4 flex-shrink-0 overflow-y-auto">
                 <nav className="space-y-2">
                   {tabs.map((tab) => {
                     const IconComponent = tab.icon;
@@ -426,7 +426,7 @@ const SettingsPanel = ({ isOpen, onClose }) => {
                       <motion.button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 ${
+                        className={`w-full flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-xl text-left transition-all duration-200 text-sm md:text-base ${
                           activeTab === tab.id
                             ? "bg-blue-500 text-white shadow-lg"
                             : "text-gray-700 hover:bg-gray-100"
@@ -434,7 +434,7 @@ const SettingsPanel = ({ isOpen, onClose }) => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        <IconComponent size={18} />
+                        <IconComponent size={16} />
                         <span className="font-medium">{tab.label}</span>
                       </motion.button>
                     );
@@ -443,12 +443,13 @@ const SettingsPanel = ({ isOpen, onClose }) => {
               </div>
 
               {/* Content */}
-              <div className="flex-1 p-6 overflow-y-auto">
+              <div className="flex-1 p-4 md:p-6 overflow-y-auto">
                 <motion.div
                   key={activeTab}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3 }}
+                  className="max-w-2xl"
                 >
                   {renderTabContent()}
                 </motion.div>
@@ -456,10 +457,10 @@ const SettingsPanel = ({ isOpen, onClose }) => {
             </div>
 
             {/* Footer */}
-            <div className="p-6 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
+            <div className="p-4 md:p-6 bg-gray-50 border-t border-gray-200 flex justify-end gap-3 flex-shrink-0">
               <motion.button
                 onClick={onClose}
-                className="px-6 py-2 text-gray-700 border border-gray-300 rounded-xl hover:bg-gray-100 transition-colors duration-200"
+                className="px-4 md:px-6 py-2 text-gray-700 border border-gray-300 rounded-xl hover:bg-gray-100 transition-colors duration-200 text-sm md:text-base"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -467,7 +468,7 @@ const SettingsPanel = ({ isOpen, onClose }) => {
               </motion.button>
               <motion.button
                 onClick={saveSettings}
-                className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors duration-200"
+                className="flex items-center gap-2 px-4 md:px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors duration-200 text-sm md:text-base"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
