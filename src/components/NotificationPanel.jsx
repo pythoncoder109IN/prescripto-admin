@@ -1,18 +1,6 @@
 import React, { useState, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Bell, 
-  X, 
-  Check, 
-  Clock, 
-  User, 
-  Calendar, 
-  AlertCircle,
-  CheckCircle,
-  Info,
-  Trash2,
-  MarkAsUnread
-} from "lucide-react";
+import { Bell, X, Check, Clock, User, Calendar, AlertCircle, CheckCircle, Info, Trash2, SquaresUnite as MarkAsUnread } from "lucide-react";
 import { AdminContext } from "../context/adminContext";
 import { DoctorContext } from "../context/doctorContext";
 
