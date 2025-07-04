@@ -11,7 +11,8 @@ import {
   Shield, 
   Stethoscope,
   Bell,
-  Settings
+  Settings,
+  ChevronDown
 } from "lucide-react";
 import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
@@ -24,7 +25,14 @@ const Navbar = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const logout = () => {
-    toast.success("Logged out successfully!");
+    toast.success("Logged out successfully!", {
+      icon: "👋",
+      style: {
+        borderRadius: "12px",
+        background: "#10b981",
+        color: "#fff",
+      },
+    });
     navigate("/");
     aToken && setAToken("");
     aToken && localStorage.removeItem("aToken");
@@ -42,7 +50,7 @@ const Navbar = () => {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-50"
+        className="bg-white/95 backdrop-blur-xl border-b border-gray-200/50 sticky top-0 z-50 shadow-sm"
       >
         <div className="flex justify-between items-center px-6 py-4">
           <motion.div 
@@ -50,19 +58,21 @@ const Navbar = () => {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <img
-              className="h-10 w-auto cursor-pointer"
+            <motion.img
+              className="h-12 w-auto cursor-pointer"
               src={assets.admin_logo}
               alt="Logo"
               onClick={() => navigate("/")}
+              whileHover={{ rotate: 5 }}
+              transition={{ type: "spring", stiffness: 300 }}
             />
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 500, damping: 30 }}
-              className="flex items-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg"
+              className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg"
             >
-              <UserIcon size={14} />
+              <UserIcon size={16} />
               {userType}
             </motion.div>
           </motion.div>
@@ -70,14 +80,18 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             {/* Notifications */}
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.1, rotate: 15 }}
               whileTap={{ scale: 0.95 }}
-              className="relative p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+              className="relative p-3 text-gray-600 hover:text-blue-600 transition-colors duration-200 rounded-full hover:bg-blue-50"
             >
               <Bell size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <motion.span 
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold"
+              >
                 3
-              </span>
+              </motion.span>
             </motion.button>
 
             {/* Profile Menu */}
@@ -86,11 +100,12 @@ const Navbar = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200"
               >
-                <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full flex items-center justify-center">
-                  <User size={16} className="text-white" />
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                  <User size={18} className="text-white" />
                 </div>
+                <ChevronDown size={16} className={`text-gray-500 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
               </motion.button>
 
               <AnimatePresence>
@@ -100,36 +115,47 @@ const Navbar = () => {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-large border border-gray-100 py-2 z-50"
+                    className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 overflow-hidden"
                   >
-                    <button
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-semibold text-gray-900">{userType} Panel</p>
+                      <p className="text-xs text-gray-500">Manage your account</p>
+                    </div>
+                    
+                    <motion.button
+                      whileHover={{ backgroundColor: "#f3f4f6", x: 4 }}
                       onClick={() => {
                         navigate("/");
                         setShowProfileMenu(false);
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 transition-all duration-200"
                     >
                       <User size={16} />
-                      Profile
-                    </button>
-                    <button
+                      <span className="font-medium">Profile</span>
+                    </motion.button>
+                    
+                    <motion.button
+                      whileHover={{ backgroundColor: "#f3f4f6", x: 4 }}
                       onClick={() => setShowProfileMenu(false)}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 transition-all duration-200"
                     >
                       <Settings size={16} />
-                      Settings
-                    </button>
-                    <hr className="my-2 border-gray-100" />
-                    <button
-                      onClick={() => {
-                        logout();
-                        setShowProfileMenu(false);
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-200"
-                    >
-                      <LogOut size={16} />
-                      Logout
-                    </button>
+                      <span className="font-medium">Settings</span>
+                    </motion.button>
+                    
+                    <div className="border-t border-gray-100 mt-2 pt-2">
+                      <motion.button
+                        whileHover={{ backgroundColor: "#fef2f2", x: 4 }}
+                        onClick={() => {
+                          logout();
+                          setShowProfileMenu(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-red-600 transition-all duration-200"
+                      >
+                        <LogOut size={16} />
+                        <span className="font-medium">Logout</span>
+                      </motion.button>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -137,12 +163,12 @@ const Navbar = () => {
 
             {/* Desktop Logout Button */}
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(239, 68, 68, 0.3)" }}
               whileTap={{ scale: 0.95 }}
               onClick={logout}
-              className="hidden md:flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+              className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              <LogOut size={16} />
+              <LogOut size={18} />
               Logout
             </motion.button>
 
@@ -151,7 +177,7 @@ const Navbar = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsMenuOpen(true)}
-              className="md:hidden p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+              className="lg:hidden p-3 text-gray-600 hover:text-blue-600 transition-colors duration-200 rounded-full hover:bg-blue-50"
             >
               <Menu size={24} />
             </motion.button>
@@ -167,7 +193,7 @@ const Navbar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 md:hidden"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden"
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.div
@@ -175,15 +201,18 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-0 right-0 w-80 h-full bg-white shadow-2xl z-50 md:hidden"
+              className="fixed top-0 right-0 w-80 h-full bg-white shadow-2xl z-50 lg:hidden"
             >
-              <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
+              <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Menu</h2>
+                  <p className="text-sm text-gray-600">{userType} Panel</p>
+                </div>
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2 text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                  className="p-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 rounded-full hover:bg-white"
                 >
                   <X size={24} />
                 </motion.button>
@@ -191,143 +220,143 @@ const Navbar = () => {
 
               <nav className="p-6">
                 {aToken && (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/admin-dashboard"
                     >
-                      <img src={assets.home_icon} alt="Dashboard" className="w-5 h-5" />
-                      Dashboard
+                      <img src={assets.home_icon} alt="Dashboard" className="w-6 h-6" />
+                      <span className="font-semibold">Dashboard</span>
                     </NavLink>
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/all-appointments"
                     >
-                      <img src={assets.appointment_icon} alt="Appointments" className="w-5 h-5" />
-                      Appointments
+                      <img src={assets.appointment_icon} alt="Appointments" className="w-6 h-6" />
+                      <span className="font-semibold">Appointments</span>
                     </NavLink>
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/add-doctor"
                     >
-                      <img src={assets.add_icon} alt="Add Doctor" className="w-5 h-5" />
-                      Add Doctor
+                      <img src={assets.add_icon} alt="Add Doctor" className="w-6 h-6" />
+                      <span className="font-semibold">Add Doctor</span>
                     </NavLink>
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/doctor-list"
                     >
-                      <img src={assets.people_icon} alt="Doctors List" className="w-5 h-5" />
-                      Doctors List
+                      <img src={assets.people_icon} alt="Doctors List" className="w-6 h-6" />
+                      <span className="font-semibold">Doctors List</span>
                     </NavLink>
                   </div>
                 )}
 
                 {dToken && (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/doctor-dashboard"
                     >
-                      <img src={assets.home_icon} alt="Dashboard" className="w-5 h-5" />
-                      Dashboard
+                      <img src={assets.home_icon} alt="Dashboard" className="w-6 h-6" />
+                      <span className="font-semibold">Dashboard</span>
                     </NavLink>
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/doctor-appointments"
                     >
-                      <img src={assets.appointment_icon} alt="Appointments" className="w-5 h-5" />
-                      Appointments
+                      <img src={assets.appointment_icon} alt="Appointments" className="w-6 h-6" />
+                      <span className="font-semibold">Appointments</span>
                     </NavLink>
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/add-blog"
                     >
                       <img 
-                        width="20" 
-                        height="20" 
+                        width="24" 
+                        height="24" 
                         src="https://img.icons8.com/ios/25/blog.png" 
                         alt="Add Blog" 
-                        className="w-5 h-5" 
+                        className="w-6 h-6" 
                       />
-                      Add Blog
+                      <span className="font-semibold">Add Blog</span>
                     </NavLink>
                     <NavLink
                       onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-4 p-4 rounded-xl transition-all duration-200 ${
                           isActive 
-                            ? "bg-primary-50 text-primary-700 border-l-4 border-primary-600" 
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105" 
+                            : "text-gray-700 hover:bg-gray-50 hover:transform hover:scale-105"
                         }`
                       }
                       to="/doctor-profile"
                     >
-                      <img src={assets.people_icon} alt="Profile" className="w-5 h-5" />
-                      Profile
+                      <img src={assets.people_icon} alt="Profile" className="w-6 h-6" />
+                      <span className="font-semibold">Profile</span>
                     </NavLink>
                   </div>
                 )}
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(239, 68, 68, 0.3)" }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     logout();
                     setIsMenuOpen(false);
                   }}
-                  className="w-full mt-6 flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 text-white py-3 rounded-lg font-medium shadow-lg"
+                  className="w-full mt-8 flex items-center justify-center gap-3 bg-gradient-to-r from-red-500 to-red-600 text-white py-4 rounded-xl font-semibold shadow-lg"
                 >
-                  <LogOut size={16} />
+                  <LogOut size={18} />
                   Logout
                 </motion.button>
               </nav>

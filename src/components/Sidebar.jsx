@@ -11,7 +11,8 @@ import {
   Users, 
   FileText, 
   User,
-  Activity
+  Activity,
+  Sparkles
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -36,17 +37,17 @@ const Sidebar = () => {
   };
 
   const adminMenuItems = [
-    { to: "/admin-dashboard", icon: Home, label: "Dashboard", asset: assets.home_icon },
-    { to: "/all-appointments", icon: Calendar, label: "Appointments", asset: assets.appointment_icon },
-    { to: "/add-doctor", icon: UserPlus, label: "Add Doctor", asset: assets.add_icon },
-    { to: "/doctor-list", icon: Users, label: "Doctors List", asset: assets.people_icon },
+    { to: "/admin-dashboard", icon: Home, label: "Dashboard", asset: assets.home_icon, color: "from-blue-500 to-blue-600" },
+    { to: "/all-appointments", icon: Calendar, label: "Appointments", asset: assets.appointment_icon, color: "from-green-500 to-green-600" },
+    { to: "/add-doctor", icon: UserPlus, label: "Add Doctor", asset: assets.add_icon, color: "from-purple-500 to-purple-600" },
+    { to: "/doctor-list", icon: Users, label: "Doctors List", asset: assets.people_icon, color: "from-orange-500 to-orange-600" },
   ];
 
   const doctorMenuItems = [
-    { to: "/doctor-dashboard", icon: Activity, label: "Dashboard", asset: assets.home_icon },
-    { to: "/doctor-appointments", icon: Calendar, label: "Appointments", asset: assets.appointment_icon },
-    { to: "/add-blog", icon: FileText, label: "Add Blog", asset: "https://img.icons8.com/ios/25/blog.png" },
-    { to: "/doctor-profile", icon: User, label: "Profile", asset: assets.people_icon },
+    { to: "/doctor-dashboard", icon: Activity, label: "Dashboard", asset: assets.home_icon, color: "from-blue-500 to-blue-600" },
+    { to: "/doctor-appointments", icon: Calendar, label: "Appointments", asset: assets.appointment_icon, color: "from-green-500 to-green-600" },
+    { to: "/add-blog", icon: FileText, label: "Add Blog", asset: "https://img.icons8.com/ios/25/blog.png", color: "from-purple-500 to-purple-600" },
+    { to: "/doctor-profile", icon: User, label: "Profile", asset: assets.people_icon, color: "from-orange-500 to-orange-600" },
   ];
 
   const menuItems = aToken ? adminMenuItems : doctorMenuItems;
@@ -56,7 +57,7 @@ const Sidebar = () => {
       variants={sidebarVariants}
       initial="hidden"
       animate="visible"
-      className="hidden md:flex flex-col w-64 bg-white/80 backdrop-blur-lg border-r border-gray-200 min-h-screen sticky top-16"
+      className="hidden lg:flex flex-col w-72 bg-white/95 backdrop-blur-xl border-r border-gray-200/50 min-h-screen sticky top-16 shadow-sm"
     >
       <div className="p-6">
         <motion.div
@@ -65,13 +66,21 @@ const Sidebar = () => {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="mb-8"
         >
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">
-            {aToken ? "Admin Panel" : "Doctor Panel"}
-          </h2>
-          <div className="w-12 h-1 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full"></div>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
+              <Sparkles className="text-white" size={20} />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">
+                {aToken ? "Admin Panel" : "Doctor Panel"}
+              </h2>
+              <p className="text-sm text-gray-600">Welcome back!</p>
+            </div>
+          </div>
+          <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"></div>
         </motion.div>
 
-        <nav className="space-y-2">
+        <nav className="space-y-3">
           {menuItems.map((item, index) => (
             <motion.div
               key={item.to}
@@ -81,35 +90,57 @@ const Sidebar = () => {
               <NavLink
                 to={item.to}
                 className={({ isActive }) =>
-                  `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                  `group flex items-center gap-4 px-4 py-4 rounded-2xl transition-all duration-300 relative overflow-hidden ${
                     isActive
-                      ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg transform scale-105"
-                      : "text-gray-700 hover:bg-gray-50 hover:text-primary-600 hover:transform hover:scale-105"
+                      ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
+                      : "text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:transform hover:scale-105"
                   }`
                 }
               >
                 {({ isActive }) => (
                   <>
-                    <div className={`p-2 rounded-lg transition-all duration-300 ${
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeBackground"
+                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-2xl"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                    
+                    <div className={`relative p-2 rounded-xl transition-all duration-300 ${
                       isActive 
-                        ? "bg-white/20" 
-                        : "bg-gray-100 group-hover:bg-primary-100"
+                        ? "bg-white/20 shadow-lg" 
+                        : "bg-gray-100 group-hover:bg-gray-200"
                     }`}>
                       <img 
                         src={item.asset} 
                         alt={item.label}
-                        className={`w-5 h-5 transition-all duration-300 ${
+                        className={`w-6 h-6 transition-all duration-300 ${
                           isActive 
                             ? "filter brightness-0 invert" 
                             : "group-hover:filter group-hover:brightness-0 group-hover:invert group-hover:hue-rotate-180"
                         }`}
                       />
                     </div>
-                    <span className="font-medium">{item.label}</span>
+                    
+                    <div className="relative">
+                      <span className="font-semibold text-base">{item.label}</span>
+                      {isActive && (
+                        <motion.div
+                          className="absolute -bottom-1 left-0 w-full h-0.5 bg-white/50 rounded-full"
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ delay: 0.1, duration: 0.3 }}
+                        />
+                      )}
+                    </div>
+                    
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
-                        className="ml-auto w-2 h-2 bg-white rounded-full"
+                        className="ml-auto w-2 h-2 bg-white rounded-full shadow-lg"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
@@ -130,25 +161,35 @@ const Sidebar = () => {
         transition={{ delay: 0.8, duration: 0.5 }}
         className="mt-auto p-6"
       >
-        <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-xl p-4 border border-primary-200">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
-              <User size={16} className="text-white" />
+        <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl p-5 border border-blue-200/50 shadow-lg">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <User size={18} className="text-white" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-bold text-gray-900">
                 {aToken ? "Admin" : "Doctor"}
               </p>
-              <p className="text-xs text-gray-600">Online</p>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <p className="text-xs text-gray-600">Online</p>
+              </div>
             </div>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-1">
-            <motion.div
-              className="bg-gradient-to-r from-primary-500 to-primary-600 h-1 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: "75%" }}
-              transition={{ delay: 1, duration: 1 }}
-            />
+          
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs text-gray-600">
+              <span>System Status</span>
+              <span className="font-semibold text-green-600">Excellent</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+              <motion.div
+                className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: "85%" }}
+                transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
+              />
+            </div>
           </div>
         </div>
       </motion.div>
