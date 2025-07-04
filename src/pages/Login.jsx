@@ -388,14 +388,6 @@ const Login = () => {
 
           </motion.div>
 
-          {/* Decorative element */}
-          <motion.div 
-            className="flex justify-center"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <Heart className="text-red-400" size={16} />
-          </motion.div>
         </motion.div>
       </motion.form>
     </div>
