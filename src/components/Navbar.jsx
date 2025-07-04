@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
+import NotificationPanel from "./NotificationPanel";
+import SettingsPanel from "./SettingsPanel";
 
 const Navbar = () => {
   const { aToken, setAToken } = useContext(AdminContext);
@@ -23,6 +25,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const logout = () => {
     toast.success("Logged out successfully!", {
@@ -82,6 +86,7 @@ const Navbar = () => {
             <motion.button
               whileHover={{ scale: 1.1, rotate: 15 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setShowNotifications(true)}
               className="relative p-3 text-gray-600 hover:text-blue-600 transition-colors duration-200 rounded-full hover:bg-blue-50"
             >
               <Bell size={20} />
@@ -92,6 +97,16 @@ const Navbar = () => {
               >
                 3
               </motion.span>
+            </motion.button>
+
+            {/* Settings */}
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowSettings(true)}
+              className="p-3 text-gray-600 hover:text-blue-600 transition-colors duration-200 rounded-full hover:bg-blue-50"
+            >
+              <Settings size={20} />
             </motion.button>
 
             {/* Profile Menu */}
@@ -136,7 +151,10 @@ const Navbar = () => {
                     
                     <motion.button
                       whileHover={{ backgroundColor: "#f3f4f6", x: 4 }}
-                      onClick={() => setShowProfileMenu(false)}
+                      onClick={() => {
+                        setShowSettings(true);
+                        setShowProfileMenu(false);
+                      }}
                       className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 transition-all duration-200"
                     >
                       <Settings size={16} />
@@ -364,6 +382,18 @@ const Navbar = () => {
           </>
         )}
       </AnimatePresence>
+
+      {/* Notification Panel */}
+      <NotificationPanel 
+        isOpen={showNotifications} 
+        onClose={() => setShowNotifications(false)} 
+      />
+
+      {/* Settings Panel */}
+      <SettingsPanel 
+        isOpen={showSettings} 
+        onClose={() => setShowSettings(false)} 
+      />
     </>
   );
 };
