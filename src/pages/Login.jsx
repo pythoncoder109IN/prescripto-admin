@@ -386,22 +386,6 @@ const Login = () => {
               </motion.p>
             )}
 
-            <motion.p 
-              className="text-sm text-gray-600"
-              whileHover={{ scale: 1.05 }}
-            >
-              {state === "Admin" ? "Are you a doctor?" : "Are you an admin?"}{" "}
-              <button
-                type="button"
-                className="text-purple-600 font-semibold hover:text-purple-700 transition-colors duration-200"
-                onClick={() => {
-                  setState(state === "Admin" ? "Doctor" : "Admin");
-                  setLoginState("Login");
-                }}
-              >
-                Switch to {state === "Admin" ? "Doctor" : "Admin"}
-              </button>
-            </motion.p>
           </motion.div>
 
           {/* Decorative element */}
