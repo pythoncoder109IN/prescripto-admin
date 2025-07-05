@@ -157,9 +157,26 @@ const DoctorContextProvider = (props) => {
     }
   };
 
+  // Clear all data when token is removed
+  const clearDoctorData = () => {
+    setAppointments([]);
+    setMeetingData({});
+    setDashData(false);
+    setProfileData(false);
+    setIsLoading(false);
+  };
+
+  // Enhanced setDToken to clear data when token is removed
+  const setDTokenWithCleanup = (token) => {
+    setDToken(token);
+    if (!token) {
+      clearDoctorData();
+    }
+  };
+
   const value = {
     dToken,
-    setDToken,
+    setDToken: setDTokenWithCleanup,
     backendUrl,
     appointments,
     setAppointments,

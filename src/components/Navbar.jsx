@@ -23,19 +23,34 @@ const Navbar = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const logout = () => {
-    toast.success("Logged out successfully!", {
-      icon: "👋",
-      style: {
-        borderRadius: "12px",
-        background: "#10b981",
-        color: "#fff",
-      },
-    });
-    navigate("/");
-    aToken && setAToken("");
-    aToken && localStorage.removeItem("aToken");
-    dToken && setDToken("");
-    dToken && localStorage.removeItem("dToken");
+    // Clear tokens first
+    if (aToken) {
+      setAToken("");
+      localStorage.removeItem("aToken");
+    }
+    if (dToken) {
+      setDToken("");
+      localStorage.removeItem("dToken");
+    }
+    
+    // Close any open menus
+    setIsMenuOpen(false);
+    setShowProfileMenu(false);
+    
+    // Navigate to login page immediately
+    navigate("/", { replace: true });
+    
+    // Show success message after navigation
+    setTimeout(() => {
+      toast.success("Logged out successfully!", {
+        icon: "👋",
+        style: {
+          borderRadius: "12px",
+          background: "#10b981",
+          color: "#fff",
+        },
+      });
+    }, 100);
   };
 
   const userType = aToken ? "Admin" : "Doctor";
@@ -119,10 +134,7 @@ const Navbar = () => {
                     <div className="border-t border-gray-100 mt-2 pt-2">
                       <motion.button
                         whileHover={{ backgroundColor: "#fef2f2", x: 4 }}
-                        onClick={() => {
-                          logout();
-                          setShowProfileMenu(false);
-                        }}
+                        onClick={logout}
                         className="w-full flex items-center gap-3 px-4 py-3 text-red-600 transition-all duration-200"
                       >
                         <LogOut size={16} />
@@ -338,10 +350,7 @@ const Navbar = () => {
                   <motion.button
                     whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(239, 68, 68, 0.3)" }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => {
-                      logout();
-                      setIsMenuOpen(false);
-                    }}
+                    onClick={logout}
                     className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-red-500 to-red-600 text-white py-4 rounded-xl font-semibold shadow-lg"
                   >
                     <LogOut size={18} />

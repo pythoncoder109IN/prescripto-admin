@@ -23,6 +23,9 @@ const App = () => {
   const { aToken } = useContext(AdminContext);
   const { dToken } = useContext(DoctorContext);
 
+  // Check if user is authenticated
+  const isAuthenticated = aToken || dToken;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Toaster
@@ -53,7 +56,7 @@ const App = () => {
       />
       
       <AnimatePresence mode="wait">
-        {aToken || dToken ? (
+        {isAuthenticated ? (
           <motion.div
             key="dashboard"
             initial={{ opacity: 0 }}

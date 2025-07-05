@@ -14,6 +14,7 @@ const AdminContextProvider = (props) => {
   const [profileData, setProfileData] = useState(false)
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
   const getAllDoctors = async () => {
     try {
       const {data} = await axios.post(backendUrl + '/api/admin/all-doctors', {}, {headers: {aToken}})
@@ -100,17 +101,40 @@ const AdminContextProvider = (props) => {
         console.log(error);
         toast.error(error.message)
     }
-}
+  }
+
+  // Clear all data when token is removed
+  const clearAdminData = () => {
+    setDoctors([]);
+    setAppointments([]);
+    setDashData(false);
+    setProfileData(false);
+  };
+
+  // Enhanced setAToken to clear data when token is removed
+  const setATokenWithCleanup = (token) => {
+    setAToken(token);
+    if (!token) {
+      clearAdminData();
+    }
+  };
 
   const value = {
-    aToken, setAToken,
-    backendUrl, doctors,
-    getAllDoctors, changeAvailability,
-    appointments, setAppointments,
+    aToken, 
+    setAToken: setATokenWithCleanup,
+    backendUrl, 
+    doctors,
+    getAllDoctors, 
+    changeAvailability,
+    appointments, 
+    setAppointments,
     getAllAppointments,
     cancelAppointment,
-    dashData, getDashData,
-    profileData, setProfileData, getProfileData
+    dashData, 
+    getDashData,
+    profileData, 
+    setProfileData, 
+    getProfileData
   };
 
   return (
