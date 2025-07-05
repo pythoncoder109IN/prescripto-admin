@@ -99,33 +99,123 @@ const PrescriptionTable = ({ appointmentId }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+      className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
     >
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-8">
-        <div className="flex items-center gap-4">
+      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <motion.div 
-            className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm"
+            className="p-2 sm:p-3 bg-white/20 rounded-xl sm:rounded-2xl backdrop-blur-sm"
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <FileText className="text-white" size={28} />
+            <FileText className="text-white" size={24} />
           </motion.div>
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-1">Prescription Writer</h2>
-            <p className="text-blue-100 text-lg">Create and manage patient prescriptions with ease</p>
+          <div className="flex-1">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1">Prescription Writer</h2>
+            <p className="text-blue-100 text-sm sm:text-lg">Create and manage patient prescriptions with ease</p>
           </div>
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="ml-auto"
+            className="hidden sm:block"
           >
             <Sparkles className="text-white/60" size={24} />
           </motion.div>
         </div>
       </div>
 
-      <div className="p-8">
-        <div className="overflow-x-auto rounded-2xl border border-gray-200">
+      <div className="p-4 sm:p-6 lg:p-8">
+        {/* Mobile Card Layout */}
+        <div className="block lg:hidden space-y-4">
+          <AnimatePresence>
+            {medicines.map((med, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="bg-gray-50 rounded-xl p-4 border border-gray-200"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                      {index + 1}
+                    </div>
+                    <span className="font-semibold text-gray-900">Medicine {index + 1}</span>
+                  </div>
+                  {medicines.length > 1 && (
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => removeRow(index)}
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                    >
+                      <Trash2 size={16} />
+                    </motion.button>
+                  )}
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <Pill className="inline mr-1" size={14} />
+                      Medicine Name
+                    </label>
+                    <input
+                      type="text"
+                      value={med.name}
+                      onChange={(e) => handleChange(index, "name", e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm"
+                      placeholder="Enter medicine name"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Dose</label>
+                      <input
+                        type="text"
+                        value={med.dose}
+                        onChange={(e) => handleChange(index, "dose", e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm"
+                        placeholder="e.g., 500mg"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <Clock className="inline mr-1" size={12} />
+                        Duration
+                      </label>
+                      <input
+                        type="text"
+                        value={med.duration}
+                        onChange={(e) => handleChange(index, "duration", e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm"
+                        placeholder="e.g., 7 days"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
+                    <input
+                      type="text"
+                      value={med.remarks}
+                      onChange={(e) => handleChange(index, "remarks", e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm"
+                      placeholder="After meals"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Desktop Table Layout */}
+        <div className="hidden lg:block overflow-x-auto rounded-2xl border border-gray-200">
           <table className="w-full">
             <thead>
               <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
@@ -243,14 +333,14 @@ const PrescriptionTable = ({ appointmentId }) => {
           </table>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 mt-10 pt-8 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6 mt-6 sm:mt-10 pt-6 sm:pt-8 border-t border-gray-200">
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(34, 197, 94, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             onClick={addNewRow}
-            className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200"
+            className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl sm:rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200"
           >
-            <Plus size={22} />
+            <Plus size={20} />
             Add Medicine
           </motion.button>
 
@@ -259,9 +349,9 @@ const PrescriptionTable = ({ appointmentId }) => {
             whileTap={{ scale: 0.95 }}
             onClick={savePrescription}
             disabled={isSaving}
-            className="flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl sm:rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Save size={22} />
+            <Save size={20} />
             {isSaving ? "Saving..." : "Save & Generate PDF"}
           </motion.button>
         </div>

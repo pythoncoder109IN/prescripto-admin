@@ -69,7 +69,7 @@ const DoctorAppointment = () => {
 
   return (
     <motion.div 
-      className="p-6 space-y-6"
+      className="space-y-4 sm:space-y-6"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -79,56 +79,56 @@ const DoctorAppointment = () => {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
         variants={itemVariants}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl">
-            <Calendar className="text-white" size={28} />
+            <Calendar className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Appointments</h1>
-            <p className="text-gray-600">Manage your patient appointments ({appointments?.length || 0} total)</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Appointments</h1>
+            <p className="text-gray-600 text-sm sm:text-base">Manage your patient appointments ({appointments?.length || 0} total)</p>
           </div>
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="ml-auto"
+            className="hidden sm:block ml-auto"
           >
             <Sparkles className="text-blue-500" size={24} />
           </motion.div>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
           <motion.button
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Search size={18} />
-            Search
+            <Search size={16} />
+            <span className="hidden sm:inline">Search</span>
           </motion.button>
           <motion.button
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Filter size={18} />
-            Filter
+            <Filter size={16} />
+            <span className="hidden sm:inline">Filter</span>
           </motion.button>
         </div>
       </motion.div>
 
       {/* Appointments Table */}
       <motion.div 
-        className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+        className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
         variants={itemVariants}
       >
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 border-b border-gray-200">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 sm:p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-500 rounded-xl">
-              <Calendar className="text-white" size={24} />
+              <Calendar className="text-white" size={20} />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Appointments Overview</h2>
-              <p className="text-gray-600">All your scheduled appointments</p>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">Appointments Overview</h2>
+              <p className="text-gray-600 text-sm sm:text-base">All your scheduled appointments</p>
             </div>
           </div>
         </div>
@@ -178,7 +178,7 @@ const DoctorAppointment = () => {
                 return (
                   <motion.div
                     key={index}
-                    className="p-6 hover:bg-gray-50 transition-colors duration-200"
+                    className="p-4 sm:p-6 hover:bg-gray-50 transition-colors duration-200"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
@@ -244,21 +244,21 @@ const DoctorAppointment = () => {
                             whileHover={{ scale: 1.1 }}
                           />
                           <div>
-                            <p className="font-semibold text-gray-900">{item.userData.name}</p>
-                            <p className="text-sm text-gray-600">{calculateAge(item.userData.dob)} years old</p>
+                            <p className="font-semibold text-gray-900 text-sm">{item.userData.name}</p>
+                            <p className="text-xs text-gray-600">{calculateAge(item.userData.dob)} years old</p>
                           </div>
                         </div>
-                        <span className="text-sm font-medium text-gray-500">#{index + 1}</span>
+                        <span className="text-xs font-medium text-gray-500">#{index + 1}</span>
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="grid grid-cols-2 gap-3 text-xs">
                         <div>
-                          <p className="text-gray-500">Date & Time</p>
+                          <p className="text-gray-500 mb-1">Date & Time</p>
                           <p className="font-medium text-gray-900">{slotDateFormat(item.slotDate)}</p>
                           <p className="text-gray-600">{item.slotTime}</p>
                         </div>
                         <div>
-                          <p className="text-gray-500">Amount</p>
+                          <p className="text-gray-500 mb-1">Amount</p>
                           <p className="font-medium text-gray-900">{currency} {item.amount}</p>
                         </div>
                       </div>
@@ -275,11 +275,11 @@ const DoctorAppointment = () => {
                         
                         <motion.button
                           onClick={() => navigate(`/appointments/${item._id}`)}
-                          className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200 text-sm font-medium"
+                          className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200 text-xs font-medium"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
-                          <Eye size={14} />
+                          <Eye size={12} />
                           View
                         </motion.button>
                       </div>

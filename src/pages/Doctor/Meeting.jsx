@@ -50,10 +50,10 @@ export const MeetingRoomUI = ({ appointmentId }) => {
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             className="mb-6"
           >
-            <Video className="text-white mx-auto" size={64} />
+            <Video className="text-white mx-auto" size={48} />
           </motion.div>
-          <h2 className="text-2xl font-bold text-white mb-4">Connecting to Meeting...</h2>
-          <p className="text-blue-200 mb-8">Please wait while we set up your video consultation</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Connecting to Meeting...</h2>
+          <p className="text-blue-200 mb-8 text-sm sm:text-base">Please wait while we set up your video consultation</p>
           <motion.div 
             className="flex justify-center space-x-2"
             initial={{ opacity: 0 }}
@@ -84,41 +84,41 @@ export const MeetingRoomUI = ({ appointmentId }) => {
       >
         {/* Header */}
         <motion.div 
-          className="bg-black/50 backdrop-blur-sm p-4 border-b border-gray-700"
+          className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 border-b border-gray-700"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between max-w-7xl mx-auto gap-3 sm:gap-0">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-500 rounded-xl">
-                <Video className="text-white" size={20} />
+                <Video className="text-white" size={18} />
               </div>
               <div>
-                <h1 className="text-white font-bold text-lg">Medical Consultation</h1>
-                <p className="text-gray-300 text-sm">Secure video meeting</p>
+                <h1 className="text-white font-bold text-base sm:text-lg">Medical Consultation</h1>
+                <p className="text-gray-300 text-xs sm:text-sm">Secure video meeting</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between sm:justify-end gap-4">
               <div className="flex items-center gap-2 px-3 py-1 bg-green-500/20 rounded-full">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-green-400 text-sm font-medium">Live</span>
+                <span className="text-green-400 text-xs sm:text-sm font-medium">Live</span>
               </div>
               
               <div className="flex items-center gap-2 text-gray-300">
-                <Users size={16} />
-                <span className="text-sm">{participants.length} participant{participants.length !== 1 ? 's' : ''}</span>
+                <Users size={14} />
+                <span className="text-xs sm:text-sm">{participants.length} participant{participants.length !== 1 ? 's' : ''}</span>
               </div>
             </div>
           </div>
         </motion.div>
 
         {/* Participant Container */}
-        <div className="flex-grow p-4 overflow-auto">
+        <div className="flex-grow p-3 sm:p-4 overflow-auto">
           <div className="max-w-7xl mx-auto h-full">
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full"
+              className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 h-full"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
@@ -126,7 +126,7 @@ export const MeetingRoomUI = ({ appointmentId }) => {
               {participants.map((participant, index) => (
                 <motion.div 
                   key={participant.sessionId} 
-                  className="relative bg-gray-800 rounded-2xl overflow-hidden shadow-2xl border border-gray-700"
+                  className="relative bg-gray-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border border-gray-700"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
@@ -134,29 +134,29 @@ export const MeetingRoomUI = ({ appointmentId }) => {
                 >
                   <ParticipantView 
                     participant={participant} 
-                    className="w-full h-full min-h-[300px] md:min-h-[400px]"
+                    className="w-full h-full min-h-[250px] sm:min-h-[300px] md:min-h-[400px]"
                   />
                   
                   {/* Participant Info Overlay */}
                   <motion.div 
-                    className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm rounded-xl px-3 py-2"
+                    className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 bg-black/70 backdrop-blur-sm rounded-xl px-3 py-2"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 + index * 0.1 }}
                   >
-                    <p className="text-white font-medium text-sm">
+                    <p className="text-white font-medium text-xs sm:text-sm">
                       {participant.name || `Participant ${index + 1}`}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
                       {participant.audioEnabled ? (
-                        <Mic className="text-green-400" size={12} />
+                        <Mic className="text-green-400" size={10} />
                       ) : (
-                        <MicOff className="text-red-400" size={12} />
+                        <MicOff className="text-red-400" size={10} />
                       )}
                       {participant.videoEnabled ? (
-                        <Video className="text-green-400" size={12} />
+                        <Video className="text-green-400" size={10} />
                       ) : (
-                        <VideoOff className="text-red-400" size={12} />
+                        <VideoOff className="text-red-400" size={10} />
                       )}
                     </div>
                   </motion.div>
@@ -168,13 +168,13 @@ export const MeetingRoomUI = ({ appointmentId }) => {
 
         {/* Call Controls */}
         <motion.div 
-          className="bg-black/80 backdrop-blur-sm border-t border-gray-700 p-4 sticky bottom-0"
+          className="bg-black/80 backdrop-blur-sm border-t border-gray-700 p-3 sm:p-4 sticky bottom-0"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
           <div className="max-w-7xl mx-auto flex items-center justify-center">
-            <div className="bg-gray-800/50 rounded-2xl p-4 border border-gray-600">
+            <div className="bg-gray-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-gray-600">
               <CallControls
                 onLeave={() => navigate(`/appointments/${appointmentId}`)}
               />
@@ -186,7 +186,7 @@ export const MeetingRoomUI = ({ appointmentId }) => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute top-8 right-8 opacity-20"
+          className="absolute top-6 sm:top-8 right-6 sm:right-8 opacity-20 hidden sm:block"
         >
           <Sparkles className="text-white" size={24} />
         </motion.div>
@@ -206,9 +206,9 @@ const MeetingRoom = () => {
         animate={{ opacity: 1 }}
       >
         <div className="text-center">
-          <PhoneOff className="text-white mx-auto mb-4" size={64} />
-          <h2 className="text-2xl font-bold text-white mb-2">Meeting Not Available</h2>
-          <p className="text-red-200">Unable to connect to the meeting. Please try again.</p>
+          <PhoneOff className="text-white mx-auto mb-4" size={48} />
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Meeting Not Available</h2>
+          <p className="text-red-200 text-sm sm:text-base">Unable to connect to the meeting. Please try again.</p>
         </div>
       </motion.div>
     );
