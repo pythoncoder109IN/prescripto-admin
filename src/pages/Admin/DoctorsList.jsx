@@ -46,7 +46,7 @@ const DoctorsList = () => {
 
   return (
     <motion.div 
-      className="p-6 space-y-6"
+      className="space-y-4 sm:space-y-6"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -56,39 +56,39 @@ const DoctorsList = () => {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
         variants={itemVariants}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl">
-            <Users className="text-white" size={28} />
+            <Users className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">All Doctors</h1>
-            <p className="text-gray-600">Manage your medical team ({doctors.length} doctors)</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">All Doctors</h1>
+            <p className="text-gray-600 text-sm sm:text-base">Manage your medical team ({doctors.length} doctors)</p>
           </div>
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="ml-auto"
+            className="hidden sm:block ml-auto"
           >
             <Sparkles className="text-blue-500" size={24} />
           </motion.div>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
           <motion.button
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Search size={18} />
-            Search
+            <Search size={16} />
+            <span className="hidden sm:inline">Search</span>
           </motion.button>
           <motion.button
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Filter size={18} />
-            Filter
+            <Filter size={16} />
+            <span className="hidden sm:inline">Filter</span>
           </motion.button>
         </div>
       </motion.div>
@@ -100,13 +100,13 @@ const DoctorsList = () => {
         </div>
       ) : (
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           variants={containerVariants}
         >
           {doctors.map((doctor, index) => (
             <motion.div
               key={index}
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group"
+              className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group"
               variants={cardVariants}
               initial="hidden"
               animate="visible"
@@ -116,7 +116,7 @@ const DoctorsList = () => {
               {/* Doctor Image */}
               <div className="relative overflow-hidden">
                 <motion.img
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-40 sm:h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                   src={doctor.image}
                   alt={doctor.name}
                   whileHover={{ scale: 1.1 }}
@@ -125,7 +125,7 @@ const DoctorsList = () => {
                 
                 {/* Availability Badge */}
                 <motion.div
-                  className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold ${
+                  className={`absolute top-3 sm:top-4 right-3 sm:right-4 px-2 sm:px-3 py-1 rounded-full text-xs font-semibold ${
                     doctor.available
                       ? 'bg-green-100 text-green-700 border border-green-200'
                       : 'bg-red-100 text-red-700 border border-red-200'
@@ -136,43 +136,43 @@ const DoctorsList = () => {
                 >
                   {doctor.available ? (
                     <div className="flex items-center gap-1">
-                      <CheckCircle size={12} />
-                      Available
+                      <CheckCircle size={10} />
+                      <span className="hidden sm:inline">Available</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-1">
-                      <XCircle size={12} />
-                      Unavailable
+                      <XCircle size={10} />
+                      <span className="hidden sm:inline">Unavailable</span>
                     </div>
                   )}
                 </motion.div>
               </div>
 
               {/* Doctor Info */}
-              <div className="p-6 space-y-4">
+              <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">{doctor.name}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">{doctor.name}</h3>
                   <div className="flex items-center gap-2 text-blue-600">
-                    <Stethoscope size={16} />
-                    <span className="font-medium">{doctor.speciality}</span>
+                    <Stethoscope size={14} />
+                    <span className="font-medium text-sm">{doctor.speciality}</span>
                   </div>
                 </div>
 
-                <div className="space-y-2 text-sm text-gray-600">
+                <div className="space-y-2 text-xs sm:text-sm text-gray-600">
                   <div className="flex items-center gap-2">
-                    <GraduationCap size={14} />
+                    <GraduationCap size={12} />
                     <span>{doctor.degree}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <MapPin size={14} />
+                    <MapPin size={12} />
                     <span>{doctor.experience}</span>
                   </div>
                 </div>
 
                 {/* Availability Toggle */}
-                <div className="pt-4 border-t border-gray-100">
+                <div className="pt-3 sm:pt-4 border-t border-gray-100">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">Availability</span>
+                    <span className="text-xs sm:text-sm font-medium text-gray-700">Availability</span>
                     <motion.label 
                       className="relative inline-flex items-center cursor-pointer"
                       whileHover={{ scale: 1.05 }}
@@ -184,7 +184,7 @@ const DoctorsList = () => {
                         onChange={() => changeAvailability(doctor._id)}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-9 h-5 sm:w-11 sm:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </motion.label>
                   </div>
                 </div>

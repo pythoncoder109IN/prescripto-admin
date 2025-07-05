@@ -130,28 +130,28 @@ const AddDoctor = () => {
 
   return (
     <motion.div 
-      className="p-6 max-w-6xl mx-auto"
+      className="max-w-6xl mx-auto space-y-6 sm:space-y-8"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Header */}
       <motion.div 
-        className="mb-8"
+        className="mb-6 sm:mb-8"
         variants={itemVariants}
       >
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
           <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl">
-            <Stethoscope className="text-white" size={28} />
+            <Stethoscope className="text-white" size={24} />
           </div>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Add New Doctor</h1>
-            <p className="text-gray-600">Create a new doctor profile for your medical team</p>
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Add New Doctor</h1>
+            <p className="text-gray-600 text-sm sm:text-base">Create a new doctor profile for your medical team</p>
           </div>
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="ml-auto"
+            className="hidden sm:block"
           >
             <Sparkles className="text-blue-500" size={24} />
           </motion.div>
@@ -160,15 +160,15 @@ const AddDoctor = () => {
 
       <form onSubmit={submitHandler}>
         <motion.div 
-          className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+          className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
           variants={itemVariants}
         >
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-8 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Doctor Information</h2>
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 sm:p-8 border-b border-gray-200">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Doctor Information</h2>
             
             {/* Upload Doctor Picture Section */}
             <motion.div 
-              className="flex items-center gap-6"
+              className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6"
               whileHover={{ scale: 1.02 }}
             >
               <motion.label 
@@ -179,7 +179,7 @@ const AddDoctor = () => {
               >
                 <div className="relative">
                   <img
-                    className="w-24 h-24 bg-gray-100 rounded-2xl object-cover border-4 border-white shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-2xl object-cover border-4 border-white shadow-lg group-hover:shadow-xl transition-all duration-300"
                     src={docImg ? URL.createObjectURL(docImg) : assets.upload_area}
                     alt="Doctor upload"
                   />
@@ -203,10 +203,10 @@ const AddDoctor = () => {
             </motion.div>
           </div>
 
-          <div className="p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="p-4 sm:p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
               {/* Left Column */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <motion.div variants={itemVariants}>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     <User className="inline mr-2" size={16} />
@@ -292,7 +292,7 @@ const AddDoctor = () => {
               </div>
 
               {/* Right Column */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <motion.div variants={itemVariants}>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     <Stethoscope className="inline mr-2" size={16} />
@@ -360,7 +360,7 @@ const AddDoctor = () => {
 
             {/* About Doctor Section */}
             <motion.div 
-              className="mt-8"
+              className="mt-6 sm:mt-8"
               variants={itemVariants}
             >
               <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -380,13 +380,13 @@ const AddDoctor = () => {
 
             {/* Submit Button */}
             <motion.div 
-              className="mt-8 flex justify-end"
+              className="mt-6 sm:mt-8 flex justify-end"
               variants={itemVariants}
             >
               <motion.button
                 type="submit"
                 disabled={isLoading}
-                className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl sm:rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.3)" }}
                 whileTap={{ scale: 0.95 }}
               >

@@ -115,28 +115,28 @@ const AdminProfile = () => {
 
   return (
     <motion.div 
-      className="p-6 max-w-4xl mx-auto"
+      className="max-w-4xl mx-auto space-y-6 sm:space-y-8"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Header */}
       <motion.div 
-        className="mb-8"
+        className="mb-6 sm:mb-8"
         variants={itemVariants}
       >
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
           <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl">
-            <UserIcon className="text-white" size={28} />
+            <UserIcon className="text-white" size={24} />
           </div>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
-            <p className="text-gray-600">Manage your account information and preferences</p>
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Profile Settings</h1>
+            <p className="text-gray-600 text-sm sm:text-base">Manage your account information and preferences</p>
           </div>
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="ml-auto"
+            className="hidden sm:block"
           >
             <Sparkles className="text-blue-500" size={24} />
           </motion.div>
@@ -145,21 +145,21 @@ const AdminProfile = () => {
 
       {currentUser ? (
         <motion.div 
-          className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+          className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
           variants={itemVariants}
         >
           {/* Profile Header */}
-          <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 p-8 border-b border-gray-200">
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 p-4 sm:p-8 border-b border-gray-200">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 sm:gap-6">
               <motion.div 
                 className="relative"
                 whileHover={{ scale: 1.05 }}
               >
-                <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <User className="text-white" size={32} />
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <User className="text-white" size={28} />
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
-                  <div className="w-3 h-3 bg-white rounded-full"></div>
+                <div className="absolute -bottom-2 -right-2 w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full"></div>
                 </div>
               </motion.div>
               
@@ -167,7 +167,7 @@ const AdminProfile = () => {
                 <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
                   {isEdit ? (
                     <motion.input
-                      className="text-2xl md:text-3xl font-bold text-gray-900 bg-white border-2 border-gray-200 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 bg-white border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       type="text"
                       value={profileData.name}
                       onChange={(e) =>
@@ -176,45 +176,45 @@ const AdminProfile = () => {
                       whileFocus={{ scale: 1.02 }}
                     />
                   ) : (
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
                       Welcome, {currentUser.name}
                     </h2>
                   )}
                   
                   <motion.div
-                    className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full text-sm font-semibold"
+                    className="flex items-center gap-2 px-2 sm:px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full text-xs sm:text-sm font-semibold"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3 }}
                   >
-                    <UserIcon size={14} />
+                    <UserIcon size={12} />
                     {userType}
                   </motion.div>
                 </div>
                 
                 <div className="flex items-center gap-2 text-gray-600">
-                  <Mail size={16} />
-                  <span className="font-medium">{currentUser.email}</span>
+                  <Mail size={14} />
+                  <span className="font-medium text-sm sm:text-base">{currentUser.email}</span>
                 </div>
               </div>
 
               {aToken && (
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
                   {isEdit ? (
                     <>
                       <motion.button
                         onClick={cancelUpdateProfile}
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors duration-200"
+                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors duration-200 text-sm"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <X size={16} />
+                        <X size={14} />
                         Cancel
                       </motion.button>
                       <motion.button
                         onClick={updateProfile}
                         disabled={isLoading}
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 disabled:opacity-50"
+                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 disabled:opacity-50 text-sm"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -222,7 +222,7 @@ const AdminProfile = () => {
                           <Loader color="#ffffff" />
                         ) : (
                           <>
-                            <Save size={16} />
+                            <Save size={14} />
                             Save Changes
                           </>
                         )}
@@ -231,11 +231,11 @@ const AdminProfile = () => {
                   ) : (
                     <motion.button
                       onClick={() => setIsEdit(true)}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200"
+                      className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 text-sm"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <Edit3 size={16} />
+                      <Edit3 size={14} />
                       Edit Profile
                     </motion.button>
                   )}
@@ -245,38 +245,38 @@ const AdminProfile = () => {
           </div>
 
           {/* Profile Content */}
-          <div className="p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="p-4 sm:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               {/* Account Information */}
               <motion.div 
-                className="space-y-6"
+                className="space-y-4 sm:space-y-6"
                 variants={itemVariants}
               >
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Account Information</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Account Information</h3>
                 
                 <div className="space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-xl">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      <User className="inline mr-2" size={16} />
+                  <div className="p-3 sm:p-4 bg-gray-50 rounded-xl">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
+                      <User className="inline mr-2" size={14} />
                       Full Name
                     </label>
-                    <p className="text-gray-900 font-medium">{currentUser.name}</p>
+                    <p className="text-gray-900 font-medium text-sm sm:text-base">{currentUser.name}</p>
                   </div>
                   
-                  <div className="p-4 bg-gray-50 rounded-xl">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      <Mail className="inline mr-2" size={16} />
+                  <div className="p-3 sm:p-4 bg-gray-50 rounded-xl">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
+                      <Mail className="inline mr-2" size={14} />
                       Email Address
                     </label>
-                    <p className="text-gray-900 font-medium">{currentUser.email}</p>
+                    <p className="text-gray-900 font-medium text-sm sm:text-base">{currentUser.email}</p>
                   </div>
                   
-                  <div className="p-4 bg-gray-50 rounded-xl">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      <UserIcon className="inline mr-2" size={16} />
+                  <div className="p-3 sm:p-4 bg-gray-50 rounded-xl">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
+                      <UserIcon className="inline mr-2" size={14} />
                       Account Type
                     </label>
-                    <p className="text-gray-900 font-medium">{userType}</p>
+                    <p className="text-gray-900 font-medium text-sm sm:text-base">{userType}</p>
                   </div>
                 </div>
               </motion.div>
@@ -284,15 +284,15 @@ const AdminProfile = () => {
               {/* Security Settings */}
               {aToken && isEdit && (
                 <motion.div 
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                   variants={itemVariants}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Security Settings</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Security Settings</h3>
                   
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        <Lock className="inline mr-2" size={16} />
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
+                        <Lock className="inline mr-2" size={14} />
                         Update Password
                       </label>
                       <motion.input
@@ -304,7 +304,7 @@ const AdminProfile = () => {
                           }))
                         }
                         value={profileData.password || ''}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm sm:text-base"
                         placeholder="Enter new password"
                         whileFocus={{ scale: 1.02 }}
                       />
@@ -315,26 +315,26 @@ const AdminProfile = () => {
 
               {/* Account Stats */}
               <motion.div 
-                className="space-y-6"
+                className="space-y-4 sm:space-y-6"
                 variants={itemVariants}
               >
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Account Status</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Account Status</h3>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  <div className="p-3 sm:p-4 bg-green-50 rounded-xl border border-green-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-semibold text-green-700">Status</span>
+                      <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-xs sm:text-sm font-semibold text-green-700">Status</span>
                     </div>
-                    <p className="text-green-900 font-bold">Active</p>
+                    <p className="text-green-900 font-bold text-sm sm:text-base">Active</p>
                   </div>
                   
-                  <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                  <div className="p-3 sm:p-4 bg-blue-50 rounded-xl border border-blue-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Shield className="text-blue-600" size={14} />
-                      <span className="text-sm font-semibold text-blue-700">Security</span>
+                      <Shield className="text-blue-600" size={12} />
+                      <span className="text-xs sm:text-sm font-semibold text-blue-700">Security</span>
                     </div>
-                    <p className="text-blue-900 font-bold">Verified</p>
+                    <p className="text-blue-900 font-bold text-sm sm:text-base">Verified</p>
                   </div>
                 </div>
               </motion.div>

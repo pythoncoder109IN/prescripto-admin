@@ -42,7 +42,7 @@ const AllAppointments = () => {
 
   return (
     <motion.div 
-      className="p-6 space-y-6"
+      className="space-y-4 sm:space-y-6"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -53,43 +53,43 @@ const AllAppointments = () => {
         variants={itemVariants}
       >
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">All Appointments</h1>
-          <p className="text-gray-600">Manage and track all patient appointments</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">All Appointments</h1>
+          <p className="text-gray-600 text-sm sm:text-base">Manage and track all patient appointments</p>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
           <motion.button
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Search size={18} />
-            Search
+            <Search size={16} />
+            <span className="hidden sm:inline">Search</span>
           </motion.button>
           <motion.button
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Filter size={18} />
-            Filter
+            <Filter size={16} />
+            <span className="hidden sm:inline">Filter</span>
           </motion.button>
         </div>
       </motion.div>
 
       {/* Appointments Table */}
       <motion.div 
-        className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+        className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
         variants={itemVariants}
       >
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 border-b border-gray-200">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 sm:p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-500 rounded-xl">
-              <Calendar className="text-white" size={24} />
+              <Calendar className="text-white" size={20} />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Appointments Overview</h2>
-              <p className="text-gray-600">Total: {appointments.length} appointments</p>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">Appointments Overview</h2>
+              <p className="text-gray-600 text-sm sm:text-base">Total: {appointments.length} appointments</p>
             </div>
           </div>
         </div>
@@ -136,7 +136,7 @@ const AllAppointments = () => {
               appointments.map((item, index) => (
                 <motion.div
                   key={index}
-                  className="p-6 hover:bg-gray-50 transition-colors duration-200"
+                  className="p-4 sm:p-6 hover:bg-gray-50 transition-colors duration-200"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}

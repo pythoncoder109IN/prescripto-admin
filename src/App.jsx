@@ -66,7 +66,7 @@ const App = () => {
             <div className="flex">
               <Sidebar />
               <motion.main 
-                className="flex-1 p-6 overflow-auto"
+                className="flex-1 p-3 sm:p-4 lg:p-6 overflow-auto"
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
