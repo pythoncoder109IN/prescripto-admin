@@ -16,7 +16,7 @@ import {
   Sparkles,
   AlertCircle,
   X,
-  SlidersHorizontal
+  ChevronDown
 } from "lucide-react";
 
 const DoctorAppointment = () => {
@@ -33,6 +33,7 @@ const DoctorAppointment = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
+  const [showSearch, setShowSearch] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const DoctorAppointment = () => {
   // Filter and Search Logic
   const filteredAppointments = appointments?.filter((appointment) => {
     // Search filter
-    const searchMatch = 
+    const searchMatch = !searchTerm || 
       appointment.userData.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       appointment.userData.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       appointment.userData.phone.includes(searchTerm);
@@ -65,25 +66,15 @@ const DoctorAppointment = () => {
     if (dateFilter !== "all") {
       const appointmentDate = new Date(appointment.slotDate.replace(/_/g, '/'));
       const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const weekFromNow = new Date(today);
-      weekFromNow.setDate(weekFromNow.getDate() + 7);
 
       switch (dateFilter) {
         case "today":
           dateMatch = appointmentDate.toDateString() === today.toDateString();
           break;
-        case "yesterday":
-          dateMatch = appointmentDate.toDateString() === yesterday.toDateString();
-          break;
         case "tomorrow":
           dateMatch = appointmentDate.toDateString() === tomorrow.toDateString();
-          break;
-        case "week":
-          dateMatch = appointmentDate >= today && appointmentDate <= weekFromNow;
           break;
         default:
           dateMatch = true;
@@ -92,12 +83,6 @@ const DoctorAppointment = () => {
 
     return searchMatch && statusMatch && dateMatch;
   }) || [];
-
-  const clearFilters = () => {
-    setSearchTerm("");
-    setStatusFilter("all");
-    setDateFilter("all");
-  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -162,24 +147,109 @@ const DoctorAppointment = () => {
             <Sparkles className="text-blue-500" size={24} />
           </motion.div>
         </div>
+        
+        <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
+          <motion.button
+            onClick={() => setShowSearch(!showSearch)}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Search size={16} />
+            <span className="hidden sm:inline">Search</span>
+          </motion.button>
+          
+          <div className="relative">
+            <motion.button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Filter size={16} />
+              <span className="hidden sm:inline">Filter</span>
+              <ChevronDown size={14} className={`transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+            </motion.button>
+
+            {/* Filter Dropdown */}
+            <AnimatePresence>
+              {showFilters && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 overflow-hidden"
+                >
+                  <div className="px-3 py-2 border-b border-gray-100">
+                    <p className="text-sm font-semibold text-gray-900">Filter by Status</p>
+                  </div>
+                  
+                  {['all', 'pending', 'completed', 'cancelled'].map((status) => (
+                    <motion.button
+                      key={status}
+                      onClick={() => {
+                        setStatusFilter(status);
+                        setShowFilters(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 text-sm transition-colors duration-200 ${
+                        statusFilter === status 
+                          ? 'bg-blue-50 text-blue-600 font-medium' 
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                      whileHover={{ backgroundColor: statusFilter === status ? "#dbeafe" : "#f9fafb" }}
+                    >
+                      {status.charAt(0).toUpperCase() + status.slice(1)} {status === 'all' ? 'Status' : ''}
+                    </motion.button>
+                  ))}
+
+                  <div className="px-3 py-2 border-t border-gray-100 mt-2">
+                    <p className="text-sm font-semibold text-gray-900">Filter by Date</p>
+                  </div>
+                  
+                  {['all', 'today', 'tomorrow'].map((date) => (
+                    <motion.button
+                      key={date}
+                      onClick={() => {
+                        setDateFilter(date);
+                        setShowFilters(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 text-sm transition-colors duration-200 ${
+                        dateFilter === date 
+                          ? 'bg-blue-50 text-blue-600 font-medium' 
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                      whileHover={{ backgroundColor: dateFilter === date ? "#dbeafe" : "#f9fafb" }}
+                    >
+                      {date.charAt(0).toUpperCase() + date.slice(1)} {date === 'all' ? 'Dates' : ''}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </motion.div>
 
-      {/* Search and Filter Bar */}
-      <motion.div 
-        className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6"
-        variants={itemVariants}
-      >
-        <div className="space-y-4">
-          {/* Search Bar */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <div className="flex-1 relative">
+      {/* Search Bar */}
+      <AnimatePresence>
+        {showSearch && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-xl shadow-lg border border-gray-100 p-4"
+          >
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
                 placeholder="Search by patient name, email, or phone..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                autoFocus
               />
               {searchTerm && (
                 <motion.button
@@ -192,121 +262,9 @@ const DoctorAppointment = () => {
                 </motion.button>
               )}
             </div>
-            
-            <motion.button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
-                showFilters 
-                  ? "bg-blue-500 text-white border-blue-500" 
-                  : "bg-white text-gray-700 border-gray-200 hover:border-blue-300"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <SlidersHorizontal size={16} />
-              <span className="hidden sm:inline">Filters</span>
-            </motion.button>
-          </div>
-
-          {/* Filter Options */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t border-gray-200"
-              >
-                {/* Status Filter */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                  >
-                    <option value="all">All Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </div>
-
-                {/* Date Filter */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Date</label>
-                  <select
-                    value={dateFilter}
-                    onChange={(e) => setDateFilter(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                  >
-                    <option value="all">All Dates</option>
-                    <option value="today">Today</option>
-                    <option value="tomorrow">Tomorrow</option>
-                    <option value="yesterday">Yesterday</option>
-                    <option value="week">Next 7 Days</option>
-                  </select>
-                </div>
-
-                {/* Clear Filters */}
-                <div className="flex items-end">
-                  <motion.button
-                    onClick={clearFilters}
-                    className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors duration-200 font-medium"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Clear Filters
-                  </motion.button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Active Filters Display */}
-          {(searchTerm || statusFilter !== "all" || dateFilter !== "all") && (
-            <div className="flex flex-wrap gap-2">
-              {searchTerm && (
-                <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  <span>Search: "{searchTerm}"</span>
-                  <button onClick={() => setSearchTerm("")}>
-                    <X size={12} />
-                  </button>
-                </motion.div>
-              )}
-              {statusFilter !== "all" && (
-                <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  <span>Status: {statusFilter}</span>
-                  <button onClick={() => setStatusFilter("all")}>
-                    <X size={12} />
-                  </button>
-                </motion.div>
-              )}
-              {dateFilter !== "all" && (
-                <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  <span>Date: {dateFilter}</span>
-                  <button onClick={() => setDateFilter("all")}>
-                    <X size={12} />
-                  </button>
-                </motion.div>
-              )}
-            </div>
-          )}
-        </div>
-      </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Appointments Table */}
       <motion.div 
@@ -370,16 +328,8 @@ const DoctorAppointment = () => {
                   ) : (
                     <>
                       <Search className="mx-auto text-gray-300 mb-3" size={48} />
-                      <p className="text-gray-500 font-medium">No appointments match your search</p>
-                      <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
-                      <motion.button
-                        onClick={clearFilters}
-                        className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Clear Filters
-                      </motion.button>
+                      <p className="text-gray-500 font-medium">No appointments match your criteria</p>
+                      <p className="text-sm text-gray-400">Try adjusting your search or filters</p>
                     </>
                   )}
                 </div>

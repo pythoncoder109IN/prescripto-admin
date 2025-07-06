@@ -13,9 +13,9 @@ import {
   MapPin,
   GraduationCap,
   X,
-  SlidersHorizontal,
   DollarSign,
-  Clock
+  Clock,
+  ChevronDown
 } from 'lucide-react';
 
 const DoctorsList = () => {
@@ -26,7 +26,7 @@ const DoctorsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [specialityFilter, setSpecialityFilter] = useState("all");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
-  const [experienceFilter, setExperienceFilter] = useState("all");
+  const [showSearch, setShowSearch] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const DoctorsList = () => {
   // Filter and Search Logic
   const filteredDoctors = doctors?.filter((doctor) => {
     // Search filter
-    const searchMatch = 
+    const searchMatch = !searchTerm ||
       doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doctor.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -58,34 +58,8 @@ const DoctorsList = () => {
       availabilityMatch = !doctor.available;
     }
 
-    // Experience filter
-    let experienceMatch = true;
-    if (experienceFilter !== "all") {
-      const expYears = parseInt(doctor.experience.split(' ')[0]);
-      switch (experienceFilter) {
-        case "1-3":
-          experienceMatch = expYears >= 1 && expYears <= 3;
-          break;
-        case "4-7":
-          experienceMatch = expYears >= 4 && expYears <= 7;
-          break;
-        case "8+":
-          experienceMatch = expYears >= 8;
-          break;
-        default:
-          experienceMatch = true;
-      }
-    }
-
-    return searchMatch && specialityMatch && availabilityMatch && experienceMatch;
+    return searchMatch && specialityMatch && availabilityMatch;
   }) || [];
-
-  const clearFilters = () => {
-    setSearchTerm("");
-    setSpecialityFilter("all");
-    setAvailabilityFilter("all");
-    setExperienceFilter("all");
-  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -137,24 +111,124 @@ const DoctorsList = () => {
             <Sparkles className="text-blue-500" size={24} />
           </motion.div>
         </div>
+        
+        <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
+          <motion.button
+            onClick={() => setShowSearch(!showSearch)}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Search size={16} />
+            <span className="hidden sm:inline">Search</span>
+          </motion.button>
+          
+          <div className="relative">
+            <motion.button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200 text-sm"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Filter size={16} />
+              <span className="hidden sm:inline">Filter</span>
+              <ChevronDown size={14} className={`transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+            </motion.button>
+
+            {/* Filter Dropdown */}
+            <AnimatePresence>
+              {showFilters && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 overflow-hidden"
+                >
+                  <div className="px-3 py-2 border-b border-gray-100">
+                    <p className="text-sm font-semibold text-gray-900">Filter by Speciality</p>
+                  </div>
+                  
+                  <motion.button
+                    onClick={() => {
+                      setSpecialityFilter("all");
+                      setShowFilters(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 text-sm transition-colors duration-200 ${
+                      specialityFilter === "all" 
+                        ? 'bg-blue-50 text-blue-600 font-medium' 
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                    whileHover={{ backgroundColor: specialityFilter === "all" ? "#dbeafe" : "#f9fafb" }}
+                  >
+                    All Specialities
+                  </motion.button>
+                  
+                  {uniqueSpecialities.slice(0, 5).map((speciality) => (
+                    <motion.button
+                      key={speciality}
+                      onClick={() => {
+                        setSpecialityFilter(speciality);
+                        setShowFilters(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 text-sm transition-colors duration-200 ${
+                        specialityFilter === speciality 
+                          ? 'bg-blue-50 text-blue-600 font-medium' 
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                      whileHover={{ backgroundColor: specialityFilter === speciality ? "#dbeafe" : "#f9fafb" }}
+                    >
+                      {speciality}
+                    </motion.button>
+                  ))}
+
+                  <div className="px-3 py-2 border-t border-gray-100 mt-2">
+                    <p className="text-sm font-semibold text-gray-900">Filter by Availability</p>
+                  </div>
+                  
+                  {['all', 'available', 'unavailable'].map((status) => (
+                    <motion.button
+                      key={status}
+                      onClick={() => {
+                        setAvailabilityFilter(status);
+                        setShowFilters(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 text-sm transition-colors duration-200 ${
+                        availabilityFilter === status 
+                          ? 'bg-blue-50 text-blue-600 font-medium' 
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                      whileHover={{ backgroundColor: availabilityFilter === status ? "#dbeafe" : "#f9fafb" }}
+                    >
+                      {status === 'all' ? 'All Status' : status.charAt(0).toUpperCase() + status.slice(1)}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </motion.div>
 
-      {/* Search and Filter Bar */}
-      <motion.div 
-        className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6"
-        variants={itemVariants}
-      >
-        <div className="space-y-4">
-          {/* Search Bar */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <div className="flex-1 relative">
+      {/* Search Bar */}
+      <AnimatePresence>
+        {showSearch && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-xl shadow-lg border border-gray-100 p-4"
+          >
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
                 placeholder="Search by name, email, speciality, or degree..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                autoFocus
               />
               {searchTerm && (
                 <motion.button
@@ -167,146 +241,9 @@ const DoctorsList = () => {
                 </motion.button>
               )}
             </div>
-            
-            <motion.button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
-                showFilters 
-                  ? "bg-blue-500 text-white border-blue-500" 
-                  : "bg-white text-gray-700 border-gray-200 hover:border-blue-300"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <SlidersHorizontal size={16} />
-              <span className="hidden sm:inline">Filters</span>
-            </motion.button>
-          </div>
-
-          {/* Filter Options */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-200"
-              >
-                {/* Speciality Filter */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Speciality</label>
-                  <select
-                    value={specialityFilter}
-                    onChange={(e) => setSpecialityFilter(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                  >
-                    <option value="all">All Specialities</option>
-                    {uniqueSpecialities.map((speciality, index) => (
-                      <option key={index} value={speciality}>{speciality}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Availability Filter */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Availability</label>
-                  <select
-                    value={availabilityFilter}
-                    onChange={(e) => setAvailabilityFilter(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                  >
-                    <option value="all">All Status</option>
-                    <option value="available">Available</option>
-                    <option value="unavailable">Unavailable</option>
-                  </select>
-                </div>
-
-                {/* Experience Filter */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Experience</label>
-                  <select
-                    value={experienceFilter}
-                    onChange={(e) => setExperienceFilter(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                  >
-                    <option value="all">All Experience</option>
-                    <option value="1-3">1-3 Years</option>
-                    <option value="4-7">4-7 Years</option>
-                    <option value="8+">8+ Years</option>
-                  </select>
-                </div>
-
-                {/* Clear Filters */}
-                <div className="flex items-end">
-                  <motion.button
-                    onClick={clearFilters}
-                    className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors duration-200 font-medium"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Clear Filters
-                  </motion.button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Active Filters Display */}
-          {(searchTerm || specialityFilter !== "all" || availabilityFilter !== "all" || experienceFilter !== "all") && (
-            <div className="flex flex-wrap gap-2">
-              {searchTerm && (
-                <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  <span>Search: "{searchTerm}"</span>
-                  <button onClick={() => setSearchTerm("")}>
-                    <X size={12} />
-                  </button>
-                </motion.div>
-              )}
-              {specialityFilter !== "all" && (
-                <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  <span>Speciality: {specialityFilter}</span>
-                  <button onClick={() => setSpecialityFilter("all")}>
-                    <X size={12} />
-                  </button>
-                </motion.div>
-              )}
-              {availabilityFilter !== "all" && (
-                <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  <span>Status: {availabilityFilter}</span>
-                  <button onClick={() => setAvailabilityFilter("all")}>
-                    <X size={12} />
-                  </button>
-                </motion.div>
-              )}
-              {experienceFilter !== "all" && (
-                <motion.div 
-                  className="flex items-center gap-2 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  <span>Experience: {experienceFilter} years</span>
-                  <button onClick={() => setExperienceFilter("all")}>
-                    <X size={12} />
-                  </button>
-                </motion.div>
-              )}
-            </div>
-          )}
-        </div>
-      </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Doctors Grid */}
       {filteredDoctors.length === 0 ? (
@@ -321,16 +258,8 @@ const DoctorsList = () => {
             ) : (
               <>
                 <Search className="mx-auto text-gray-300 mb-3" size={48} />
-                <p className="text-gray-500 font-medium">No doctors match your search</p>
-                <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
-                <motion.button
-                  onClick={clearFilters}
-                  className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Clear Filters
-                </motion.button>
+                <p className="text-gray-500 font-medium">No doctors match your criteria</p>
+                <p className="text-sm text-gray-400">Try adjusting your search or filters</p>
               </>
             )}
           </div>
