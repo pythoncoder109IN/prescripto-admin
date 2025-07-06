@@ -61,8 +61,10 @@ const BlogEditor = () => {
   };
 
   useEffect(() => {
-    if (!quillRef.current && !showPreview) {
-      quillRef.current = new Quill(editorRef.current, {
+  if (!showPreview) {
+    const editor = editorRef.current;
+    if (editor && !quillRef.current) {
+      quillRef.current = new Quill(editor, {
         theme: "snow",
         modules: {
           toolbar: [
@@ -79,15 +81,19 @@ const BlogEditor = () => {
         placeholder: "Write your blog content here...",
       });
 
-      quillRef.current.on("text-change", (delta, oldDelta, source) => {
-        const html = editorRef.current.querySelector(".ql-editor").innerHTML;
+      quillRef.current.on("text-change", () => {
+        const html = editor.querySelector(".ql-editor").innerHTML;
         setEditorContent(html);
       });
+
+      // Restore content if available
       if (editorContent) {
         quillRef.current.root.innerHTML = editorContent;
       }
     }
-  }, [showPreview]);
+  }
+}, [showPreview]);
+
 
   const handleSubmit = async () => {
     try {
