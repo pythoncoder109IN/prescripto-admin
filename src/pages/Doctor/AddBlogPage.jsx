@@ -83,6 +83,9 @@ const BlogEditor = () => {
         const html = editorRef.current.querySelector(".ql-editor").innerHTML;
         setEditorContent(html);
       });
+      if (editorContent) {
+        quillRef.current.root.innerHTML = editorContent;
+      }
     }
   }, [showPreview]);
 
