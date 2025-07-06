@@ -61,7 +61,14 @@ const BlogEditor = () => {
   };
 
   useEffect(() => {
-    if (!quillRef.current && !showPreview) {
+  if (!showPreview) {
+    // Always create a new Quill instance when editor is mounted
+    if (editorRef.current) {
+      // Clear any previous instance
+      if (quillRef.current) {
+        quillRef.current = null;
+      }
+
       quillRef.current = new Quill(editorRef.current, {
         theme: "snow",
         modules: {
@@ -79,12 +86,16 @@ const BlogEditor = () => {
         placeholder: "Write your blog content here...",
       });
 
-      quillRef.current.on("text-change", (delta, oldDelta, source) => {
+      quillRef.current.root.innerHTML = editorContent;
+
+      quillRef.current.on("text-change", () => {
         const html = editorRef.current.querySelector(".ql-editor").innerHTML;
         setEditorContent(html);
       });
     }
-  }, [showPreview]);
+  }
+}, [showPreview]);
+
 
   const handleSubmit = async () => {
     try {
