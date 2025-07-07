@@ -77,14 +77,14 @@ export const MeetingRoomUI = ({ appointmentId }) => {
   return (
     <StreamTheme>
       <motion.section 
-        className="relative min-h-screen bg-gradient-to-br from-gray-900 to-black flex flex-col"
+        className="relative min-h-screen bg-gradient-to-br from-gray-900 to-black flex flex-col overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         {/* Header */}
         <motion.div 
-          className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 border-b border-gray-700"
+          className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 border-b border-gray-700 flex-shrink-0"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -115,10 +115,14 @@ export const MeetingRoomUI = ({ appointmentId }) => {
         </motion.div>
 
         {/* Participant Container */}
-        <div className="flex-grow p-3 sm:p-4 overflow-auto">
-          <div className="max-w-7xl mx-auto h-full">
+        <div className="flex-grow p-2 sm:p-3 md:p-4 overflow-hidden">
+          <div className="max-w-7xl mx-auto h-full w-full">
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 h-full"
+              className={`w-full h-full ${
+                participants.length === 1 
+                  ? 'flex items-center justify-center' 
+                  : 'grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 md:gap-4'
+              }`}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
@@ -126,20 +130,26 @@ export const MeetingRoomUI = ({ appointmentId }) => {
               {participants.map((participant, index) => (
                 <motion.div 
                   key={participant.sessionId} 
-                  className="relative bg-gray-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border border-gray-700"
+                  className={`relative bg-gray-800 rounded-lg sm:rounded-xl overflow-hidden shadow-2xl border border-gray-700 ${
+                    participants.length === 1 
+                      ? 'w-full max-w-4xl h-full max-h-[70vh]' 
+                      : 'w-full h-full min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[400px]'
+                  }`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
                   whileHover={{ scale: 1.02 }}
                 >
-                  <ParticipantView 
-                    participant={participant} 
-                    className="w-full h-full min-h-[250px] sm:min-h-[300px] md:min-h-[400px]"
-                  />
+                  <div className="w-full h-full">
+                    <ParticipantView 
+                      participant={participant} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                   
                   {/* Participant Info Overlay */}
                   <motion.div 
-                    className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 bg-black/70 backdrop-blur-sm rounded-xl px-3 py-2"
+                    className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-2 sm:left-3 md:left-4 bg-black/70 backdrop-blur-sm rounded-lg sm:rounded-xl px-2 sm:px-3 py-1 sm:py-2"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 + index * 0.1 }}
@@ -147,7 +157,7 @@ export const MeetingRoomUI = ({ appointmentId }) => {
                     <p className="text-white font-medium text-xs sm:text-sm">
                       {participant.name || `Participant ${index + 1}`}
                     </p>
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-1 sm:gap-2 mt-1">
                       {participant.audioEnabled ? (
                         <Mic className="text-green-400" size={10} />
                       ) : (
@@ -168,16 +178,18 @@ export const MeetingRoomUI = ({ appointmentId }) => {
 
         {/* Call Controls */}
         <motion.div 
-          className="bg-black/80 backdrop-blur-sm border-t border-gray-700 p-3 sm:p-4 sticky bottom-0"
+          className="bg-black/80 backdrop-blur-sm border-t border-gray-700 p-2 sm:p-3 md:p-4 flex-shrink-0"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
           <div className="max-w-7xl mx-auto flex items-center justify-center">
-            <div className="bg-gray-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-gray-600">
-              <CallControls
-                onLeave={() => navigate(`/appointments/${appointmentId}`)}
-              />
+            <div className="bg-gray-800/50 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 border border-gray-600 w-full max-w-md">
+              <div className="str-video__call-controls-wrapper">
+                <CallControls
+                  onLeave={() => navigate(`/appointments/${appointmentId}`)}
+                />
+              </div>
             </div>
           </div>
         </motion.div>
@@ -186,11 +198,78 @@ export const MeetingRoomUI = ({ appointmentId }) => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute top-6 sm:top-8 right-6 sm:right-8 opacity-20 hidden sm:block"
+          className="absolute top-4 sm:top-6 md:top-8 right-4 sm:right-6 md:right-8 opacity-20 hidden sm:block"
         >
-          <Sparkles className="text-white" size={24} />
+          <Sparkles className="text-white" size={20} />
         </motion.div>
       </motion.section>
+
+      {/* Custom CSS for Stream Video Components */}
+      <style jsx global>{`
+        .str-video__call-controls {
+          gap: 0.5rem !important;
+          justify-content: center !important;
+          flex-wrap: wrap !important;
+        }
+        
+        .str-video__call-controls button {
+          min-width: 40px !important;
+          min-height: 40px !important;
+          border-radius: 12px !important;
+          margin: 0 !important;
+        }
+        
+        @media (min-width: 640px) {
+          .str-video__call-controls {
+            gap: 1rem !important;
+          }
+          
+          .str-video__call-controls button {
+            min-width: 48px !important;
+            min-height: 48px !important;
+          }
+        }
+        
+        @media (min-width: 768px) {
+          .str-video__call-controls {
+            gap: 1.5rem !important;
+          }
+          
+          .str-video__call-controls button {
+            min-width: 56px !important;
+            min-height: 56px !important;
+          }
+        }
+        
+        .str-video__participant-view {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+        }
+        
+        .str-video__participant-view video {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+        }
+        
+        /* Hide record button */
+        .str-video__composite-button[title="Record call"] {
+          display: none !important;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+          .str-video__call-controls-wrapper {
+            padding: 0.5rem !important;
+          }
+          
+          .str-video__call-controls {
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+        }
+      `}</style>
     </StreamTheme>
   );
 };
