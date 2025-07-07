@@ -178,18 +178,16 @@ export const MeetingRoomUI = ({ appointmentId }) => {
 
         {/* Call Controls */}
         <motion.div 
-          className="bg-black/80 backdrop-blur-sm border-t border-gray-700 p-2 sm:p-3 md:p-4 flex-shrink-0"
+          className="bg-black/80 backdrop-blur-sm border-t border-gray-700 p-3 sm:p-4 md:p-6 flex-shrink-0"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
           <div className="max-w-7xl mx-auto flex items-center justify-center">
-            <div className="bg-gray-800/50 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 border border-gray-600 w-full max-w-md">
-              <div className="str-video__call-controls-wrapper">
-                <CallControls
-                  onLeave={() => navigate(`/appointments/${appointmentId}`)}
-                />
-              </div>
+            <div className="bg-gray-800/50 rounded-2xl p-4 sm:p-6 border border-gray-600 w-full max-w-lg">
+              <CallControls
+                onLeave={() => navigate(`/appointments/${appointmentId}`)}
+              />
             </div>
           </div>
         </motion.div>
@@ -204,47 +202,34 @@ export const MeetingRoomUI = ({ appointmentId }) => {
         </motion.div>
       </motion.section>
 
-      {/* Custom CSS for Stream Video Components */}
+      {/* Minimal CSS overrides to maintain Stream Video styling */}
       <style jsx global>{`
+        /* Only override what's necessary for responsiveness */
         .str-video__call-controls {
-          gap: 0.5rem !important;
+          display: flex !important;
           justify-content: center !important;
+          align-items: center !important;
+          gap: 1rem !important;
           flex-wrap: wrap !important;
         }
         
-        .str-video__call-controls button {
-          min-width: 40px !important;
-          min-height: 40px !important;
-          border-radius: 12px !important;
-          margin: 0 !important;
-        }
-        
-        @media (min-width: 640px) {
+        /* Responsive gap adjustments only */
+        @media (max-width: 640px) {
           .str-video__call-controls {
-            gap: 1rem !important;
-          }
-          
-          .str-video__call-controls button {
-            min-width: 48px !important;
-            min-height: 48px !important;
+            gap: 0.75rem !important;
           }
         }
         
         @media (min-width: 768px) {
           .str-video__call-controls {
-            gap: 1.5rem !important;
-          }
-          
-          .str-video__call-controls button {
-            min-width: 56px !important;
-            min-height: 56px !important;
+            gap: 1.25rem !important;
           }
         }
         
+        /* Ensure participant view fills container properly */
         .str-video__participant-view {
           width: 100% !important;
           height: 100% !important;
-          object-fit: cover !important;
         }
         
         .str-video__participant-view video {
@@ -258,16 +243,9 @@ export const MeetingRoomUI = ({ appointmentId }) => {
           display: none !important;
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 640px) {
-          .str-video__call-controls-wrapper {
-            padding: 0.5rem !important;
-          }
-          
-          .str-video__call-controls {
-            padding: 0 !important;
-            margin: 0 !important;
-          }
+        /* Ensure proper container sizing */
+        .str-video__call-controls-wrapper {
+          width: 100% !important;
         }
       `}</style>
     </StreamTheme>
